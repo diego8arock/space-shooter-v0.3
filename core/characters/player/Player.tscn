@@ -1,0 +1,63 @@
+[gd_scene load_steps=9 format=2]
+
+[ext_resource path="res://core/characters/player/Player.gd" type="Script" id=1]
+[ext_resource path="res://assets/player/playerShip3_green.png" type="Texture" id=2]
+[ext_resource path="res://assets/player/turretBase_small.png" type="Texture" id=3]
+[ext_resource path="res://core/characters/player/Turret.gd" type="Script" id=4]
+[ext_resource path="res://assets/player/gun08.png" type="Texture" id=5]
+[ext_resource path="res://core/characters/player/Indicators.gd" type="Script" id=6]
+[ext_resource path="res://core/characters/player/Trail.gd" type="Script" id=7]
+
+[sub_resource type="Gradient" id=1]
+colors = PoolColorArray( 1, 1, 1, 0, 0.968627, 0.580392, 0.270588, 1 )
+
+[node name="Player" type="KinematicBody2D" groups=[
+"player",
+]]
+collision_mask = 2
+script = ExtResource( 1 )
+
+[node name="Sprite" type="Sprite" parent="."]
+rotation = 1.5708
+texture = ExtResource( 2 )
+
+[node name="CollisionShape2D" type="CollisionPolygon2D" parent="."]
+polygon = PoolVector2Array( -21.7505, -48.5967, 21.2449, -12.5361, 37.8882, -4.76919, 38.1656, 4.66206, 25.1283, 7.99072, -21.7505, 49.0444, -27.0209, 49.0444, -27.5757, 20.7506, -37.2843, 12.1516, -37.2843, -13.3683, -27.0209, -24.1865, -29.24, -50.5384 )
+
+[node name="Camera2D" type="Camera2D" parent="."]
+current = true
+smoothing_enabled = true
+smoothing_speed = 30.0
+
+[node name="Turret" type="Sprite" parent="."]
+editor/display_folded = true
+scale = Vector2( 0.5, 0.5 )
+texture = ExtResource( 3 )
+script = ExtResource( 4 )
+
+[node name="Pivot" type="Node2D" parent="Turret"]
+
+[node name="Gun" type="Sprite" parent="Turret/Pivot"]
+position = Vector2( 16.6667, 0 )
+rotation = 4.71239
+texture = ExtResource( 5 )
+
+[node name="Muzzle" type="Position2D" parent="Turret/Pivot"]
+position = Vector2( 50, 0 )
+
+[node name="TimerRPM" type="Timer" parent="Turret"]
+wait_time = 0.2
+one_shot = true
+
+[node name="Indicators" type="Node2D" parent="."]
+script = ExtResource( 6 )
+
+[node name="Trail" type="Line2D" parent="."]
+pause_mode = 2
+rotation = 1.5708
+z_index = -1
+width = 5.0
+gradient = SubResource( 1 )
+texture_mode = 1869116169
+script = ExtResource( 7 )
+[connection signal="timeout" from="Turret/TimerRPM" to="Turret" method="_on_TimerRPM_timeout"]
