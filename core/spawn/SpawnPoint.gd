@@ -2,7 +2,7 @@ extends Node2D
 
 onready var container = $EnemyContainer
 onready var timer = $Timer
-var fighter: PackedScene = preload("res://core/characters/enemies/Fighter.tscn")
+var fighter: PackedScene = preload("res://core/characters/enemies/fighter/Fighter.tscn")
 enum TIER {ONE, TWO, THREE}
 export(TIER) var tier = TIER.ONE
 var max_enemies: int
@@ -16,6 +16,12 @@ func _ready() -> void:
 			timer.wait_time = rand_range(4.0, 6.0)
 			timer.start()
 			max_enemies = 3
+			enemy = fighter
+		TIER.TWO:
+			randomize()
+			timer.wait_time = rand_range(4.0, 6.0)
+			timer.start()
+			max_enemies = 1
 			enemy = fighter
 	
 func _on_Timer_timeout() -> void:

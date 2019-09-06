@@ -24,7 +24,7 @@ func _on_Timer_timeout() -> void:
 
 func _on_Bullet_body_entered(body: PhysicsBody2D) -> void:
 	
-	if body.health != 0.0:
+	if body.health.get_current_health() != 0.0:
 		WeaponManager.show_explosion(explosion.instance(), body.global_position, global_scale)
 		body.take_damage(damage)	
 		call_deferred("free")
