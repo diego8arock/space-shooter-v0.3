@@ -1,0 +1,17 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://core/characters/enemies/frigate/Frigate.gd" type="Script" id=1]
+[ext_resource path="res://assets/enemies/enemyBlack4.png" type="Texture" id=2]
+[ext_resource path="res://core/characters/modules/health/Health.tscn" type="PackedScene" id=3]
+
+[node name="Frigate" type="KinematicBody2D"]
+script = ExtResource( 1 )
+
+[node name="Sprite" type="Sprite" parent="."]
+scale = Vector2( 2, 2 )
+texture = ExtResource( 2 )
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+polygon = PoolVector2Array( -14.721, -83.1848, -37.7395, -84.6942, -80.3803, -60.5436, -81.135, 41.3415, -27.1736, 71.5297, -23.4001, 82.8503, 22.2596, 84.737, 26.7878, 70.3976, 81.1265, 40.2094, 80.7491, -56.7701, 37.731, -84.3168, 15.0898, -82.4301, 15.0898, -66.2039, -14.721, -66.5813 )
+
+[node name="Health" parent="." instance=ExtResource( 3 )]

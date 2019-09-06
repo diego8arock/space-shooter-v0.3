@@ -1,12 +1,15 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://core/characters/player/Player.gd" type="Script" id=1]
 [ext_resource path="res://assets/player/playerShip3_green.png" type="Texture" id=2]
-[ext_resource path="res://assets/player/turretBase_small.png" type="Texture" id=3]
-[ext_resource path="res://core/characters/player/Turret.gd" type="Script" id=4]
-[ext_resource path="res://assets/player/gun08.png" type="Texture" id=5]
-[ext_resource path="res://core/characters/player/Indicators.gd" type="Script" id=6]
-[ext_resource path="res://core/characters/player/Trail.gd" type="Script" id=7]
+[ext_resource path="res://core/characters/player/Camera2D.gd" type="Script" id=3]
+[ext_resource path="res://assets/player/turretBase_small.png" type="Texture" id=4]
+[ext_resource path="res://core/characters/player/Turret.gd" type="Script" id=5]
+[ext_resource path="res://assets/player/gun08.png" type="Texture" id=6]
+[ext_resource path="res://core/characters/player/Indicators.gd" type="Script" id=7]
+[ext_resource path="res://core/characters/player/Trail.gd" type="Script" id=8]
+[ext_resource path="res://core/characters/modules/health/Health.tscn" type="PackedScene" id=9]
+[ext_resource path="res://core/characters/modules/debug/Debug.tscn" type="PackedScene" id=10]
 
 [sub_resource type="Gradient" id=1]
 colors = PoolColorArray( 1, 1, 1, 0, 0.968627, 0.580392, 0.270588, 1 )
@@ -28,19 +31,20 @@ polygon = PoolVector2Array( -21.7505, -48.5967, 21.2449, -12.5361, 37.8882, -4.7
 current = true
 smoothing_enabled = true
 smoothing_speed = 30.0
+script = ExtResource( 3 )
 
 [node name="Turret" type="Sprite" parent="."]
 editor/display_folded = true
 scale = Vector2( 0.5, 0.5 )
-texture = ExtResource( 3 )
-script = ExtResource( 4 )
+texture = ExtResource( 4 )
+script = ExtResource( 5 )
 
 [node name="Pivot" type="Node2D" parent="Turret"]
 
 [node name="Gun" type="Sprite" parent="Turret/Pivot"]
 position = Vector2( 16.6667, 0 )
 rotation = 4.71239
-texture = ExtResource( 5 )
+texture = ExtResource( 6 )
 
 [node name="Muzzle" type="Position2D" parent="Turret/Pivot"]
 position = Vector2( 50, 0 )
@@ -50,7 +54,7 @@ wait_time = 0.2
 one_shot = true
 
 [node name="Indicators" type="Node2D" parent="."]
-script = ExtResource( 6 )
+script = ExtResource( 7 )
 
 [node name="Trail" type="Line2D" parent="."]
 pause_mode = 2
@@ -58,6 +62,12 @@ rotation = 1.5708
 z_index = -1
 width = 5.0
 gradient = SubResource( 1 )
-texture_mode = 1869116169
-script = ExtResource( 7 )
+texture_mode = -1704367455
+script = ExtResource( 8 )
+
+[node name="Health" parent="." instance=ExtResource( 9 )]
+
+[node name="Debug" parent="." instance=ExtResource( 10 )]
+enabled = false
 [connection signal="timeout" from="Turret/TimerRPM" to="Turret" method="_on_TimerRPM_timeout"]
+[connection signal="health_depleated" from="Health" to="." method="_on_Health_health_depleated"]

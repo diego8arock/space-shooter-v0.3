@@ -1,7 +1,11 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=9 format=2]
 
-[ext_resource path="res://core/characters/enemies/Fighter.gd" type="Script" id=1]
-[ext_resource path="res://assets/enemies/enemyBlue1.png" type="Texture" id=2]
+[ext_resource path="res://core/characters/enemies/fighter/Fighter.gd" type="Script" id=1]
+[ext_resource path="res://core/characters/enemies/fighter/fighter_movement_resource.tres" type="Resource" id=2]
+[ext_resource path="res://core/characters/enemies/fighter/fighter_core_data.tres" type="Resource" id=3]
+[ext_resource path="res://assets/enemies/enemyBlue1.png" type="Texture" id=4]
+[ext_resource path="res://core/characters/modules/health/Health.tscn" type="PackedScene" id=5]
+[ext_resource path="res://core/characters/modules/debug/Debug.tscn" type="PackedScene" id=6]
 
 [sub_resource type="CircleShape2D" id=1]
 radius = 1257.68
@@ -13,10 +17,12 @@ radius = 604.397
 collision_layer = 2
 collision_mask = 4
 script = ExtResource( 1 )
+movement = ExtResource( 2 )
+data = ExtResource( 3 )
 
 [node name="Sprite" type="Sprite" parent="."]
 rotation = -1.5708
-texture = ExtResource( 2 )
+texture = ExtResource( 4 )
 
 [node name="Muzzle" type="Position2D" parent="Sprite"]
 position = Vector2( 0, 51.491 )
@@ -27,12 +33,14 @@ rotation = -1.5708
 polygon = PoolVector2Array( -28.5486, -41.4879, -43.0443, -16.278, -24.7671, 36.6629, -15.9436, 36.0327, -13.4226, 8.30173, 18.0898, 10.1925, 11.7874, 30.9907, 21.8713, 36.6629, 43.2998, -17.5385, 26.2831, -41.4879, 11.1571, -32.6644, 10.5269, -25.1015, -6.48984, -24.4712, -9.64108, -32.6644 )
 
 [node name="SeekArea" type="Area2D" parent="."]
+editor/display_folded = true
 collision_layer = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="SeekArea"]
 shape = SubResource( 1 )
 
 [node name="PursuitArea" type="Area2D" parent="."]
+editor/display_folded = true
 collision_layer = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="PursuitArea"]
@@ -43,6 +51,11 @@ shape = SubResource( 2 )
 [node name="TimerRPM" type="Timer" parent="."]
 wait_time = 0.5
 one_shot = true
+
+[node name="Health" parent="." instance=ExtResource( 5 )]
+
+[node name="Debug" parent="." instance=ExtResource( 6 )]
+enabled = false
 [connection signal="body_entered" from="SeekArea" to="." method="_on_SeekArea_body_entered"]
 [connection signal="body_exited" from="SeekArea" to="." method="_on_SeekArea_body_exited"]
 [connection signal="body_entered" from="PursuitArea" to="." method="_on_PursuitArea_body_entered"]
@@ -50,3 +63,4 @@ one_shot = true
 [connection signal="screen_entered" from="VisibilityNotifier2D" to="." method="_on_VisibilityNotifier2D_screen_entered"]
 [connection signal="screen_exited" from="VisibilityNotifier2D" to="." method="_on_VisibilityNotifier2D_screen_exited"]
 [connection signal="timeout" from="TimerRPM" to="." method="_on_TimerRPM_timeout"]
+[connection signal="health_depleated" from="Health" to="." method="_on_Health_health_depleated"]

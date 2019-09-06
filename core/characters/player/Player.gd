@@ -1,4 +1,4 @@
-extends KinematicBody2D
+extends Actor
 
 onready var explosion: PackedScene = preload("res://effects/small_explosion/SmallExplosion.tscn")
 
@@ -10,6 +10,8 @@ onready var collision = $CollisionShape2D
 onready var camera = $Camera2D
 onready var indicators = $Indicators
 onready var trail = $Trail
+onready var health = $Health
+onready var debug = $Debug
 
 var direction: Vector2 = Vector2(1, 0)
 var velocity: Vector2
@@ -25,17 +27,16 @@ var max_super_speed: float = 3.0
 var min_super_speed: float = 1.0
 var super_speed_acceleration: float = 2.5
 
-var health: float = 100.0
-const ZOOM_RATE: Vector2 = Vector2(0.5, 0.5)
-const MAX_ZOOM: Vector2 =  Vector2(1.4, 1.4)
-const NORMAL_ZOOM: Vector2 = Vector2(1, 1)
-
 signal player_died()
 
 func _ready() -> void:
 	
 	ui = get_node(ui_path)
-	
+	health.set_max_health(100.0)
+	health.set_full_health()
+	debug.add_property("max_super_speed")
+	debug.add_property("current_health", health)
+
 func _process(delta: float) -> void:
 
 	if Input.is_action_pressed("player_forward"):
@@ -55,13 +56,9 @@ func _process(delta: float) -> void:
 	if Input.is_action_pressed("super_speed"):
 		curren_super_speed += super_speed_acceleration * delta
 		curren_super_speed = clamp(curren_super_speed, min_super_speed, max_super_speed)
-		if camera.zoom <= MAX_ZOOM:
-			camera.zoom += ZOOM_RATE * delta
 	else:
 		curren_super_speed -= super_speed_acceleration * delta
-		curren_super_speed = clamp(curren_super_speed, min_super_speed, max_super_speed)
-		if camera.zoom >= NORMAL_ZOOM:
-			camera.zoom -= ZOOM_RATE * delta			
+		curren_super_speed = clamp(curren_super_speed, min_super_speed, max_super_speed)		
 		
 func _physics_process(delta: float) -> void:
 	
@@ -70,18 +67,14 @@ func _physics_process(delta: float) -> void:
 	collision.global_rotation = velocity_rotation
 	move_and_collide(velocity)
 	
-func take_damage(_damage:float) -> void:
+func take_damage(_damage: float) -> void:
 	
-	if health == 0.0:
-		return
+	health.take_damage(_damage)	
+	ui.set_progress(health.get_current_health())
+
+func _on_Health_health_depleated() -> void:
 	
-	if health > 0.0:
-		health -= _damage
-		health = clamp(health, 0.0, 100.0)
-		ui.set_progress(health)
-		
-	if health == 0.0:
-		died()
+	died()
 	
 func died() -> void:
 	
@@ -100,6 +93,6 @@ func restart() -> void:
 	ship_sprite.global_rotation = deg2rad(90)
 	collision.global_rotation = deg2rad(90)
 	show()
-	health = 100.0
+	health.set_full_health()
 	yield(get_tree().create_timer(1.0), "timeout")
 	trail.show()
