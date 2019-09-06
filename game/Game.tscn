@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://game/Game.gd" type="Script" id=1]
 [ext_resource path="res://debug/Debug.tscn" type="PackedScene" id=2]
@@ -7,10 +7,11 @@
 [ext_resource path="res://ui/Stats.gd" type="Script" id=5]
 [ext_resource path="res://ui/StartScreen.tscn" type="PackedScene" id=6]
 [ext_resource path="res://ui/GameOverScreen.tscn" type="PackedScene" id=7]
-[ext_resource path="res://assets/background/darkPurple.png" type="Texture" id=8]
-[ext_resource path="res://core/characters/player/Player.tscn" type="PackedScene" id=9]
-[ext_resource path="res://game/WeaponContainer.gd" type="Script" id=10]
-[ext_resource path="res://core/spawn/SpawnPoint.tscn" type="PackedScene" id=11]
+[ext_resource path="res://core/minimap/Minimap.tscn" type="PackedScene" id=8]
+[ext_resource path="res://assets/background/darkPurple.png" type="Texture" id=9]
+[ext_resource path="res://core/characters/player/Player.tscn" type="PackedScene" id=10]
+[ext_resource path="res://game/WeaponContainer.gd" type="Script" id=11]
+[ext_resource path="res://core/spawn/SpawnPoint.tscn" type="PackedScene" id=12]
 
 [node name="Game" type="Node2D"]
 script = ExtResource( 1 )
@@ -30,34 +31,39 @@ script = ExtResource( 5 )
 
 [node name="GameOverScreen" parent="CanvasLayer" instance=ExtResource( 7 )]
 
+[node name="Minimap" parent="CanvasLayer" instance=ExtResource( 8 )]
+position = Vector2( 1150, 600 )
+scale = Vector2( 0.5, 0.5 )
+player_path = NodePath("../../Player")
+
 [node name="ParallaxBackground" type="ParallaxBackground" parent="."]
-editor/display_folded = true
 
 [node name="ParallaxLayer" type="ParallaxLayer" parent="ParallaxBackground"]
 
 [node name="Sprite" type="Sprite" parent="ParallaxBackground/ParallaxLayer"]
-texture = ExtResource( 8 )
+texture = ExtResource( 9 )
 centered = false
 region_enabled = true
 region_rect = Rect2( 0, 0, 3000, 3000 )
 
-[node name="Player" parent="." instance=ExtResource( 9 )]
+[node name="Player" parent="." instance=ExtResource( 10 )]
 position = Vector2( 1024, 600 )
 scale = Vector2( 0.5, 0.5 )
 ui_path = NodePath("../CanvasLayer/Stats")
 
 [node name="WeaponContainer" type="Node2D" parent="."]
-script = ExtResource( 10 )
+script = ExtResource( 11 )
 
 [node name="SpawnPointContainer" type="Node2D" parent="."]
 
-[node name="SpawnPoint" parent="SpawnPointContainer" instance=ExtResource( 11 )]
+[node name="SpawnPoint" parent="SpawnPointContainer" instance=ExtResource( 12 )]
 position = Vector2( -3466.18, -1919.37 )
 rotation = 0.662452
 
-[node name="SpawnPoint2" parent="SpawnPointContainer" instance=ExtResource( 11 )]
+[node name="SpawnPoint2" parent="SpawnPointContainer" instance=ExtResource( 12 )]
 position = Vector2( 6473.65, -1114.87 )
 rotation = 0.662452
+tier = 1
 [connection signal="exit_button_pressed" from="CanvasLayer/StartScreen" to="." method="_on_StartScreen_exit_button_pressed"]
 [connection signal="start_button_pressed" from="CanvasLayer/StartScreen" to="." method="_on_StartScreen_start_button_pressed"]
 [connection signal="exit_button_pressed" from="CanvasLayer/GameOverScreen" to="." method="_on_GameOverScreen_exit_button_pressed"]
