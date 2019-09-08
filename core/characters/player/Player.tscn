@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://core/characters/player/Player.gd" type="Script" id=1]
 [ext_resource path="res://assets/player/playerShip3_green.png" type="Texture" id=2]
@@ -6,10 +6,9 @@
 [ext_resource path="res://assets/player/turretBase_small.png" type="Texture" id=4]
 [ext_resource path="res://core/characters/player/Turret.gd" type="Script" id=5]
 [ext_resource path="res://assets/player/gun08.png" type="Texture" id=6]
-[ext_resource path="res://core/characters/player/Indicators.gd" type="Script" id=7]
-[ext_resource path="res://core/characters/player/Trail.gd" type="Script" id=8]
-[ext_resource path="res://core/characters/modules/health/Health.tscn" type="PackedScene" id=9]
-[ext_resource path="res://core/characters/modules/debug/Debug.tscn" type="PackedScene" id=10]
+[ext_resource path="res://core/characters/player/Trail.gd" type="Script" id=7]
+[ext_resource path="res://core/characters/modules/health/Health.tscn" type="PackedScene" id=8]
+[ext_resource path="res://core/characters/modules/debug/Debug.tscn" type="PackedScene" id=9]
 
 [sub_resource type="Gradient" id=1]
 colors = PoolColorArray( 1, 1, 1, 0, 0.968627, 0.580392, 0.270588, 1 )
@@ -53,21 +52,17 @@ position = Vector2( 50, 0 )
 wait_time = 0.2
 one_shot = true
 
-[node name="Indicators" type="Node2D" parent="."]
-script = ExtResource( 7 )
-
 [node name="Trail" type="Line2D" parent="."]
 pause_mode = 2
 rotation = 1.5708
 z_index = -1
 width = 5.0
 gradient = SubResource( 1 )
-texture_mode = -1704367455
-script = ExtResource( 8 )
+script = ExtResource( 7 )
 
-[node name="Health" parent="." instance=ExtResource( 9 )]
+[node name="Health" parent="." instance=ExtResource( 8 )]
 
-[node name="Debug" parent="." instance=ExtResource( 10 )]
+[node name="Debug" parent="." instance=ExtResource( 9 )]
 enabled = false
 [connection signal="timeout" from="Turret/TimerRPM" to="Turret" method="_on_TimerRPM_timeout"]
 [connection signal="health_depleated" from="Health" to="." method="_on_Health_health_depleated"]
