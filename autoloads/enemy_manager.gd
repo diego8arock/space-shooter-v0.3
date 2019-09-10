@@ -9,7 +9,7 @@ func add_enemies(_enemy) -> void:
 	emit_signal("enemy_added", _enemy)
 	
 func is_enemy_alive(_enemy) -> bool:
-	return enemies[_enemy]
+	return enemies[_enemy] if enemies.has(_enemy) else false
 	
 func delete_enemy(_enemy, add_points: bool = true) -> void:
 	enemies[_enemy] = false
@@ -20,5 +20,16 @@ func delete_enemy(_enemy, add_points: bool = true) -> void:
 func on_Indicator_indicator_deleted(_enemy) -> void:
 	enemies.erase(_enemy)
 	_enemy.call_deferred("free")
+	
+func get_all_enemies(is_alive = true) -> Array:
+	
+	if not is_alive:
+		return enemies
+	
+	var alive_enemies = []
+	for e in enemies:
+		if enemies[e]:
+			alive_enemies.push_back(e)
+	return alive_enemies
 	
 	
