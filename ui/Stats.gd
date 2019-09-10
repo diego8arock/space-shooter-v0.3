@@ -1,6 +1,10 @@
 extends MarginContainer
 
 
-func set_progress(_value: float) -> void:
+func set_health(_value: float) -> void:
 	
-	$VBoxContainer/HBoxContainer/TextureProgress.value = _value
+	$VBoxContainer/Life.set_progress(_value)
+
+func set_energy(_value: float) -> void:
+	
+	$VBoxContainer/Energy.set_progress(_value)
