@@ -1,8 +1,5 @@
 extends Node2D
 
-export var player_path: NodePath
-var player
-
 onready var player_sprite = $Player
 onready var enemies = $Enemies
 onready var line = $Line2D
@@ -11,18 +8,16 @@ var enemy_indicator_map = {}
 signal indicator_deleted(_enemy)
 
 var radius
-var distance_to_target
 onready var viewport_size = OS.get_real_window_size()
-
+onready var radar_rect = $Radar.get_rect().size
 func _ready() -> void:	
 	
 	var p1: Vector2 = line.points[0]
 	var p2: Vector2 = line.points[1]
-	radius = p1.distance_to(p2) 
-	global_position = viewport_size - ($Radar.get_rect().size / 2)
+	radius = p1.distance_to(p2) 	
 	line.hide()
-	player = get_node(player_path)
-	distance_to_target = get_viewport().size
+	global_position = viewport_size - (radar_rect / 3.5)
+	global_scale /= 2.0
 	
 	EnemyManager.connect("enemy_added", self, "on_EnemyManager_enemy_added")
 	EnemyManager.connect("enemy_deleted", self, "on_EnemyManager_enemy_deleted")
@@ -30,7 +25,7 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	
-	global_rotation = player.velocity_rotation * -1
+	global_rotation = GameManager.player.velocity_rotation * -1
 	player_sprite.global_rotation = deg2rad(-90)
 	
 func on_EnemyManager_enemy_added(_enemy) -> void:
@@ -41,7 +36,6 @@ func create_indicator(_enemy) -> void:
 	
 	var new_indicator = indicator.instance()
 	new_indicator.assing_enemy(_enemy)
-	new_indicator.assing_player(player)
 	new_indicator.assing_radius(radius)
 	enemies.add_child(new_indicator)	
 	enemy_indicator_map[_enemy] = new_indicator
