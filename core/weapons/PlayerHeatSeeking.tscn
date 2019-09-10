@@ -1,0 +1,37 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://core/weapons/HeatSeeking.gd" type="Script" id=1]
+[ext_resource path="res://assets/ammo/laserBlue16.png" type="Texture" id=2]
+[ext_resource path="res://core/characters/modules/debug/Debug.tscn" type="PackedScene" id=3]
+
+[sub_resource type="CapsuleShape2D" id=1]
+radius = 5.69455
+height = 22.7753
+
+[node name="PlayerHeatSeeking" type="Area2D"]
+collision_layer = 4
+collision_mask = 2
+script = ExtResource( 1 )
+
+[node name="Sprite" type="Sprite" parent="."]
+rotation = 1.5708
+texture = ExtResource( 2 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2( 11, 0 )
+rotation = 1.5708
+shape = SubResource( 1 )
+
+[node name="TimeToLive" type="Timer" parent="."]
+wait_time = 5.0
+autostart = true
+
+[node name="Debug" parent="." instance=ExtResource( 3 )]
+enabled = false
+
+[node name="TimerStateChange" type="Timer" parent="."]
+wait_time = 0.1
+autostart = true
+[connection signal="body_entered" from="." to="." method="_on_HeatSeeking_body_entered"]
+[connection signal="timeout" from="TimeToLive" to="." method="_on_TimeToLive_timeout"]
+[connection signal="timeout" from="TimerStateChange" to="." method="_on_TimerStateChange_timeout"]
