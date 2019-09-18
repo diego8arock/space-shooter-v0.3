@@ -8,7 +8,7 @@ onready var rapid_fire
 onready var heatseeking
 
 enum POWER_UP { HEALTH, SHOTGUN, RAPID_FIRE, HEATSEEKING, EMPTY }
-var weights = { POWER_UP.HEALTH:0.1, POWER_UP.SHOTGUN:0.3, POWER_UP.RAPID_FIRE:0.3, POWER_UP.HEATSEEKING:0.15, POWER_UP.EMPTY: 0.8 }
+var weights = { POWER_UP.HEALTH:0.01, POWER_UP.SHOTGUN:0.1, POWER_UP.RAPID_FIRE:0.1, POWER_UP.HEATSEEKING:0.05, POWER_UP.EMPTY: 0.8 }
 var sum_of_weights: float = 0.0
 var power_up_container
 
@@ -39,6 +39,7 @@ func generate_power_up(_enemy_position: Vector2) -> void:
 	
 func select_power_up_by_weight() -> int:
 		
+	randomize()
 	var random_weight = rand_range(0.0, sum_of_weights)
 	for w in weights:
 		random_weight = random_weight - weights[w]

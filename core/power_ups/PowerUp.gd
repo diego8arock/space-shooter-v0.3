@@ -16,8 +16,7 @@ func _ready() -> void:
 	randomize()
 	var rand_x = rand_range(-1.0, 1.0)
 	var rand_y = rand_range(-1.0, 1.0)
-	initial_direction = Vector2(rand_x, rand_y).normalized()
-	
+	initial_direction = Vector2(rand_x, rand_y).normalized()	
 	debug.add_property("power_up_name")
 	debug.add_property("initial_direction")
 	
@@ -26,6 +25,7 @@ func set_type(_type) -> void:
 	type = _type	
 	power_up_name = power_up_name_list[_type]
 	label.text = power_up_name
+	label.rect_position.x = (label.rect_size.x / 2) * -1
 	
 func set_icon() -> void:
 	
