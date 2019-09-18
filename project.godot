@@ -24,6 +24,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://core/characters/enemies/enemy.gd"
 }, {
+"base": "Node",
+"class": "Health",
+"language": "GDScript",
+"path": "res://core/characters/modules/health/Health.gd"
+}, {
 "base": "Resource",
 "class": "Movement",
 "language": "GDScript",
@@ -43,6 +48,7 @@ _global_script_class_icons={
 "Actor": "",
 "CoreData": "",
 "Enemy": "",
+"Health": "",
 "Movement": "",
 "Player": "",
 "PowerUP": ""
@@ -127,5 +133,5 @@ bullet_time={
 
 [rendering]
 
-quality/driver/driver_name="GLES2"
 environment/default_environment="res://default_env.tres"
+quality/dynamic_fonts/use_oversampling=false
