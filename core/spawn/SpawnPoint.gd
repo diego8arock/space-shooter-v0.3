@@ -2,27 +2,36 @@ extends Node2D
 
 onready var container = $EnemyContainer
 onready var timer = $Timer
+onready var ray = $RayCast2D
+
 var fighter: PackedScene = preload("res://core/characters/enemies/fighter/Fighter.tscn")
+var frigate: PackedScene = preload("res://core/characters/enemies/frigate/Frigate.tscn")
+
 enum TIER {ONE, TWO, THREE}
 export(TIER) var tier = TIER.ONE
+
 var max_enemies: int
 var enemy: PackedScene 
 
 func _ready() -> void:
 	
+	randomize()
+	var angle = rand_range(0.0, 270.0)
+	ray.global_rotation_degrees = angle
+	angle = rand_range(0.0, 270.0)
+	global_rotation_degrees = angle	
+	
 	match tier:
-		TIER.ONE:
-			randomize()
+		TIER.ONE:			
 			timer.wait_time = rand_range(4.0, 6.0)
 			timer.start()
 			max_enemies = 3
-			enemy = fighter
+			enemy = frigate
 		TIER.TWO:
-			randomize()
 			timer.wait_time = rand_range(4.0, 6.0)
 			timer.start()
 			max_enemies = 1
-			enemy = fighter
+			enemy = frigate
 	
 func _on_Timer_timeout() -> void:
 
@@ -32,7 +41,7 @@ func _on_Timer_timeout() -> void:
 	var new_enemy = enemy.instance()
 	container.add_child(new_enemy)
 	new_enemy.global_position = global_position + Vector2(50, 50)
-	new_enemy.global_rotation = global_rotation
+	new_enemy.global_rotation = ray.global_rotation
 	new_enemy.wander_angle = rad2deg(global_rotation)
 	new_enemy.global_scale = Vector2(0.5, 0.5)
 	EnemyManager.add_enemies(new_enemy)
