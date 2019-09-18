@@ -13,4 +13,8 @@ func _process(delta: float) -> void:
 	else:
 		if zoom >= NORMAL_ZOOM:
 			zoom -= ZOOM_RATE * delta	
+			
+func restart() -> void:
+	
+	zoom = NORMAL_ZOOM
 	
