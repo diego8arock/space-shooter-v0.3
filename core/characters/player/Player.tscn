@@ -21,6 +21,7 @@ collision_mask = 26
 script = ExtResource( 1 )
 
 [node name="Sprite" type="Sprite" parent="."]
+editor/display_folded = true
 rotation = 1.5708
 texture = ExtResource( 2 )
 
@@ -31,13 +32,20 @@ rotation = -3.57628e-006
 initial_vel = 100.0
 
 [node name="CollisionShape2D" type="CollisionPolygon2D" parent="."]
-polygon = PoolVector2Array( -21.7505, -48.5967, 21.2449, -12.5361, 37.8882, -4.76919, 38.1656, 4.66206, 25.1283, 7.99072, -21.7505, 49.0444, -27.0209, 49.0444, -27.5757, 20.7506, -37.2843, 12.1516, -37.2843, -13.3683, -27.0209, -24.1865, -29.24, -50.5384 )
+rotation = 1.5708
+polygon = PoolVector2Array( -3.98361, -37.6809, 3.54457, -37.3224, 10.3558, -24.417, 49.0721, 19.3182, 47.9967, 28.6388, 21.1103, 28.2803, 13.5821, 37.9594, -12.9457, 36.5255, -21.1909, 28.6388, -48.4357, 30.0728, -49.8697, 22.903, -10.7948, -22.983 )
 
 [node name="Camera2D" type="Camera2D" parent="."]
 current = true
 zoom = Vector2( 1.7, 1.7 )
 smoothing_enabled = true
 smoothing_speed = 30.0
+drag_margin_left = 0.1
+drag_margin_top = 0.1
+drag_margin_right = 0.1
+drag_margin_bottom = 0.1
+editor_draw_limits = true
+editor_draw_drag_margin = true
 script = ExtResource( 4 )
 
 [node name="Turret" type="Sprite" parent="."]
@@ -59,6 +67,9 @@ position = Vector2( 50, 0 )
 wait_time = 0.2
 one_shot = true
 
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="Turret"]
+bus = "PlayerTurret"
+
 [node name="Trail" type="Line2D" parent="."]
 pause_mode = 2
 visible = false
@@ -72,6 +83,5 @@ script = ExtResource( 8 )
 [node name="Health" parent="." instance=ExtResource( 9 )]
 
 [node name="Debug" parent="." instance=ExtResource( 10 )]
-enabled = false
 [connection signal="timeout" from="Turret/TimerRPM" to="Turret" method="_on_TimerRPM_timeout"]
 [connection signal="health_depleated" from="Health" to="." method="_on_Health_health_depleated"]

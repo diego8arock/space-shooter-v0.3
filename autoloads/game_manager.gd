@@ -33,6 +33,7 @@ func restart_game() -> void:
 		s.delete_all_enemies()
 	do_background_parallax = true
 	player.global_position = OS.window_size / 2	
+	player.restart()
 	score_ui.set_score(0)
 	get_tree().paused = false
 	

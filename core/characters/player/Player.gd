@@ -6,13 +6,14 @@ onready var ship_sprite = $Sprite
 onready var collision = $CollisionShape2D
 onready var camera = $Camera2D
 onready var trail = $Trail
-onready var health = $Health
 onready var debug = $Debug
 onready var turret = $Turret
 onready var thruster = $Sprite/Thruster
 
+const MAX_HEALTH: float = 100.0
+
 #movement
-var direction: Vector2 = Vector2(1, 0)
+var direction: Vector2 = Vector2.UP
 var velocity: Vector2
 var rotation_speed: float = 2.0
 var current_speed: float = 0.0
@@ -73,7 +74,7 @@ func _process(delta: float) -> void:
 func _physics_process(delta: float) -> void:
 	
 	velocity = direction.normalized().rotated(velocity_rotation) * Time.adjust_speed(current_speed) * Time.adjust_speed(curren_super_speed)
-	ship_sprite.global_rotation = velocity_rotation + deg2rad(90)
+	ship_sprite.global_rotation = velocity_rotation
 	collision.global_rotation = velocity_rotation
 	move_and_collide(velocity)
 	
@@ -110,29 +111,31 @@ func died() -> void:
 	trail.hide()
 	WeaponManager.show_small_explosion(global_position, global_scale * 1.5)
 	Event.emit_signal("player_died")
+	set_physics_process(false)
 	
 func start() -> void:
 	
-	health.set_max_health(100.0)
+	health = $Health
+	health.set_max_health(MAX_HEALTH)
 	health.set_full_health()
-	debug.add_property("max_super_speed")
-	debug.add_property("current_health", health)
+	collision_damage = 100.0
 	current_bullet_time = max_bullet_Time
 	Event.connect("health_restored", self, "on_Event_health_restore")
+	debug.add_property("is_bullet_time_on")
 	
 func restart() -> void:
 	
-	current_speed = 0.0
-	curren_super_speed = 0.0
-	velocity = Vector2()
-	global_position = Vector2(1024, 600)
-	global_rotation = deg2rad(0)
-	ship_sprite.global_rotation = deg2rad(90)
-	collision.global_rotation = deg2rad(90)
+	current_speed = min_speed
+	curren_super_speed = min_speed
+	current_bullet_time = max_bullet_Time
+	direction = Vector2.UP
+	velocity = Vector2.UP
+	velocity_rotation = deg2rad(0)
 	show()
 	health.set_full_health()
-	yield(get_tree().create_timer(1.0), "timeout")
-	trail.show()
+	GameManager.stats_ui.set_health(health.get_current_health())
+	camera.restart()
+	set_physics_process(true)
 
 func on_Event_health_restore() -> void:
 	
