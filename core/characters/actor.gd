@@ -5,3 +5,16 @@ class_name Actor
 export var movement: Resource
 export var data: Resource
 
+#nodes
+var health: Health
+
+#core data
+var collision_damage: float
+
+#sounds
+onready var death_explosion = preload("res://assets/sounds/explosions/explosion1.ogg")
+var audio: AudioStreamPlayer2D
+
+#override this method
+func take_damage(_damage: float) -> void:
+	pass

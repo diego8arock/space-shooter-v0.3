@@ -23,12 +23,11 @@ var wander_rotation_speed: float
 var player
 
 #core data
-var collision_damage: float
 var points: int
 
 #state
-enum STATE {IDLE, SEEK, PURSUIT}
-var state_name = ["IDLE", "SEEK", "PURSUIT", "EVADE"]
+enum STATE {IDLE, SEEK, ATTACK, EVADE}
+var state_name = ["IDLE", "SEEK", "ATTACK", "EVADE"]
 var state
 
 #signals
@@ -99,6 +98,15 @@ func steer(_start: Vector2) -> void:
 func died() -> void:
 
 	hide()
+	#if put on a function, the yield wont work
+	if audio:
+		audio.bus = "EnemyDeathExplosion"
+		audio.stream = death_explosion
+		audio.play()
+		yield(audio, "finished")
 	Event.emit_signal("enemy_destroyed", global_position)
 	EnemyManager.delete_enemy(self)
 	
+func chage_state(_state) -> void:
+	
+	state = _state
