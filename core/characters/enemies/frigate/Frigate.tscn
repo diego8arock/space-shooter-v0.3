@@ -1,17 +1,89 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://core/characters/enemies/frigate/Frigate.gd" type="Script" id=1]
-[ext_resource path="res://assets/enemies/enemyBlack4.png" type="Texture" id=2]
-[ext_resource path="res://core/characters/modules/health/Health.tscn" type="PackedScene" id=3]
+[ext_resource path="res://core/characters/enemies/frigate/frigate_movement_resource.tres" type="Resource" id=2]
+[ext_resource path="res://core/characters/enemies/frigate/frigate_core_data_resource.tres" type="Resource" id=3]
+[ext_resource path="res://assets/enemies/enemyBlack4.png" type="Texture" id=4]
+[ext_resource path="res://core/characters/modules/health/Health.tscn" type="PackedScene" id=5]
+[ext_resource path="res://core/characters/modules/debug/Debug.tscn" type="PackedScene" id=6]
+[ext_resource path="res://core/characters/enemies/frigate/TurretsController.gd" type="Script" id=7]
+[ext_resource path="res://assets/enemies/turretBase_small.png" type="Texture" id=8]
+[ext_resource path="res://core/characters/enemies/frigate/EnemyTurret.gd" type="Script" id=9]
+[ext_resource path="res://assets/enemies/gun06.png" type="Texture" id=10]
+
+[sub_resource type="CircleShape2D" id=1]
+radius = 1457.38
 
 [node name="Frigate" type="KinematicBody2D"]
+collision_layer = 2
+collision_mask = 5
 script = ExtResource( 1 )
+movement = ExtResource( 2 )
+data = ExtResource( 3 )
 
 [node name="Sprite" type="Sprite" parent="."]
-scale = Vector2( 2, 2 )
-texture = ExtResource( 2 )
+rotation = -1.5708
+scale = Vector2( 4, 4 )
+texture = ExtResource( 4 )
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+rotation = -1.5708
+scale = Vector2( 2, 2 )
 polygon = PoolVector2Array( -14.721, -83.1848, -37.7395, -84.6942, -80.3803, -60.5436, -81.135, 41.3415, -27.1736, 71.5297, -23.4001, 82.8503, 22.2596, 84.737, 26.7878, 70.3976, 81.1265, 40.2094, 80.7491, -56.7701, 37.731, -84.3168, 15.0898, -82.4301, 15.0898, -66.2039, -14.721, -66.5813 )
 
-[node name="Health" parent="." instance=ExtResource( 3 )]
+[node name="Health" parent="." instance=ExtResource( 5 )]
+
+[node name="AttackArea" type="Area2D" parent="."]
+collision_layer = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AttackArea"]
+shape = SubResource( 1 )
+
+[node name="Debug" parent="." instance=ExtResource( 6 )]
+
+[node name="TurretsController" type="Node2D" parent="."]
+script = ExtResource( 7 )
+
+[node name="Turret" type="Sprite" parent="TurretsController"]
+editor/display_folded = true
+texture = ExtResource( 8 )
+script = ExtResource( 9 )
+
+[node name="Pivot" type="Node2D" parent="TurretsController/Turret"]
+
+[node name="Gun" type="Sprite" parent="TurretsController/Turret/Pivot"]
+rotation = 4.71239
+texture = ExtResource( 10 )
+offset = Vector2( 0, 10 )
+
+[node name="Muzzle" type="Position2D" parent="TurretsController/Turret/Pivot"]
+position = Vector2( 39, 0 )
+
+[node name="TimerRPM" type="Timer" parent="TurretsController/Turret"]
+wait_time = 0.6
+
+[node name="Turret2" type="Sprite" parent="TurretsController"]
+editor/display_folded = true
+position = Vector2( -93, 0 )
+texture = ExtResource( 8 )
+script = ExtResource( 9 )
+
+[node name="Pivot" type="Node2D" parent="TurretsController/Turret2"]
+
+[node name="Gun" type="Sprite" parent="TurretsController/Turret2/Pivot"]
+rotation = 4.71239
+texture = ExtResource( 10 )
+offset = Vector2( 0, 10 )
+
+[node name="Muzzle" type="Position2D" parent="TurretsController/Turret2/Pivot"]
+position = Vector2( 39, 0 )
+
+[node name="TimerRPM" type="Timer" parent="TurretsController/Turret2"]
+wait_time = 0.6
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+[connection signal="health_depleated" from="Health" to="." method="_on_Health_health_depleated"]
+[connection signal="body_entered" from="AttackArea" to="." method="_on_Area2D_body_entered"]
+[connection signal="body_exited" from="AttackArea" to="." method="_on_Area2D_body_exited"]
+[connection signal="timeout" from="TurretsController/Turret/TimerRPM" to="TurretsController/Turret" method="_on_TimerRPM_timeout"]
+[connection signal="timeout" from="TurretsController/Turret2/TimerRPM" to="TurretsController/Turret2" method="_on_TimerRPM_timeout"]
