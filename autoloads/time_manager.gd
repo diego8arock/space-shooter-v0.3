@@ -29,3 +29,7 @@ func slow_down() -> void:
 func adjust_speed(_speed: float) -> float:
 	
 	return _speed / speed_state
+	
+func adjust_velocity(_velocity: Vector2) -> Vector2:
+
+	return Vector2(_velocity.x / speed_state, _velocity.y / speed_state)
