@@ -83,5 +83,6 @@ script = ExtResource( 8 )
 [node name="Health" parent="." instance=ExtResource( 9 )]
 
 [node name="Debug" parent="." instance=ExtResource( 10 )]
+enabled = false
 [connection signal="timeout" from="Turret/TimerRPM" to="Turret" method="_on_TimerRPM_timeout"]
 [connection signal="health_depleated" from="Health" to="." method="_on_Health_health_depleated"]

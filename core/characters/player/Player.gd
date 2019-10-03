@@ -68,8 +68,10 @@ func _process(delta: float) -> void:
 	current_bullet_time = clamp(current_bullet_time, min_bullet_time, max_bullet_Time)
 	GameManager.stats_ui.set_energy(current_bullet_time)
 	
-	if is_bullet_time_on and current_bullet_time == min_bullet_time:
+	if is_bullet_time_on and current_bullet_time <= min_bullet_time:
 		is_bullet_time_on = false
+		camera.is_bullet_time_on = false
+		Event.emit_signal("normal_time")
 		
 func _physics_process(delta: float) -> void:
 	
