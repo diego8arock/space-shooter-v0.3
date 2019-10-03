@@ -94,13 +94,13 @@ func set_weapon_type(_type) -> void:
 	type = _type
 	match type:
 			WEAPON_TYPE.SINGLE:
-				rpm.wait_time = 0.2
+				rpm.wait_time = 0.4
 				damage = 35.0
 			WEAPON_TYPE.SHOTGUN: 
 				rpm.wait_time = 0.8
 				damage = 15.0
 			WEAPON_TYPE.RAPID_FIRE: 
-				rpm.wait_time = 0.09
+				rpm.wait_time = 0.12
 				damage = 10.0
 			WEAPON_TYPE.HEATSEEKING: 
 				rpm.wait_time = 0.5
