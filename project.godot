@@ -24,6 +24,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://core/characters/enemies/enemy.gd"
 }, {
+"base": "Enemy",
+"class": "Fighter",
+"language": "GDScript",
+"path": "res://core/characters/enemies/fighter/Fighter.gd"
+}, {
 "base": "Node",
 "class": "Health",
 "language": "GDScript",
@@ -43,15 +48,22 @@ _global_script_classes=[ {
 "class": "PowerUP",
 "language": "GDScript",
 "path": "res://core/power_ups/PowerUp.gd"
+}, {
+"base": "Fighter",
+"class": "Shield",
+"language": "GDScript",
+"path": "res://core/characters/enemies/shield/Shield.gd"
 } ]
 _global_script_class_icons={
 "Actor": "",
 "CoreData": "",
 "Enemy": "",
+"Fighter": "",
 "Health": "",
 "Movement": "",
 "Player": "",
-"PowerUP": ""
+"PowerUP": "",
+"Shield": ""
 }
 
 [application]
@@ -126,6 +138,7 @@ bullet_time={
 2d_physics/layer_3="player_bullet"
 2d_physics/layer_4="enemy_bullet"
 2d_physics/layer_5="power_up"
+2d_physics/layer_6="enemy_shield"
 
 [physics]
 
@@ -133,5 +146,6 @@ bullet_time={
 
 [rendering]
 
+quality/driver/driver_name="GLES2"
 environment/default_environment="res://default_env.tres"
 quality/dynamic_fonts/use_oversampling=false
