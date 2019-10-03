@@ -1,0 +1,15 @@
+[gd_resource type="Resource" load_steps=2 format=2]
+
+[ext_resource path="res://core/resources/movement.gd" type="Script" id=1]
+
+[resource]
+script = ExtResource( 1 )
+max_force = 2.0
+mass = 3.0
+max_seek_speed = 1.0
+max_pursuit_speed = 4.0
+max_wander_speed = 1.0
+cirlce_distance = 20.0
+circle_radius = 10.0
+angle_change = 4.0
+wander_rotation_speed = 2.0

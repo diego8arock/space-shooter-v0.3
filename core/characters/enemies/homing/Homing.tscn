@@ -1,0 +1,40 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://core/characters/enemies/homing/Homing.gd" type="Script" id=1]
+[ext_resource path="res://core/characters/enemies/homing/homing_movement_resource.tres" type="Resource" id=2]
+[ext_resource path="res://core/characters/enemies/homing/homing_core_data.tres" type="Resource" id=3]
+[ext_resource path="res://assets/enemies/enemyRed5.png" type="Texture" id=4]
+[ext_resource path="res://core/characters/modules/health/Health.tscn" type="PackedScene" id=5]
+
+[sub_resource type="CircleShape2D" id=1]
+radius = 1010.44
+
+[node name="Homing" type="KinematicBody2D"]
+collision_layer = 2
+collision_mask = 4
+script = ExtResource( 1 )
+movement = ExtResource( 2 )
+data = ExtResource( 3 )
+
+[node name="Sprite" type="Sprite" parent="."]
+rotation = -1.5708
+scale = Vector2( 1.5, 1.5 )
+texture = ExtResource( 4 )
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+rotation = -1.5708
+scale = Vector2( 1.5, 1.5 )
+polygon = PoolVector2Array( -48.1699, -41.7286, -31.4506, -41.9546, -8.63112, -28.1725, -1.62712, -30.8837, 8.53999, -27.4947, 30.0039, -41.7286, 47.4009, -41.7286, 28.8742, 31.4745, 17.3515, 31.2486, 17.5774, 35.9932, 12.3809, 41.6416, -11.3423, 41.6416, -17.2167, 37.5748, -17.8945, 32.3783, -27.1578, 32.1523 )
+
+[node name="Area2D" type="Area2D" parent="."]
+collision_layer = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource( 1 )
+
+[node name="TimerShoot" type="Timer" parent="."]
+one_shot = true
+
+[node name="Health" parent="." instance=ExtResource( 5 )]
+[connection signal="body_entered" from="Area2D" to="." method="_on_Area2D_body_entered"]
+[connection signal="timeout" from="TimerShoot" to="." method="_on_TimerShoot_timeout"]
