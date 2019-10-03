@@ -36,6 +36,9 @@ signal screen_entered()
 #warning-ignore:unused_signal
 signal screen_exited()
 
+#ui
+var health_bar
+
 func _ready() -> void:
 
 	var m = movement as Movement
@@ -97,14 +100,16 @@ func steer(_start: Vector2) -> void:
 
 func died() -> void:
 
+	set_physics_process(false)
+	set_process(false)
 	hide()
+	Event.emit_signal("enemy_destroyed", global_position)
 	#if put on a function, the yield wont work
 	if audio:
 		audio.bus = "EnemyDeathExplosion"
 		audio.stream = death_explosion
 		audio.play()
 		yield(audio, "finished")
-	Event.emit_signal("enemy_destroyed", global_position)
 	EnemyManager.delete_enemy(self)
 	
 func chage_state(_state) -> void:

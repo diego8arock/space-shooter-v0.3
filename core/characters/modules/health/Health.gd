@@ -3,6 +3,7 @@ class_name Health
 
 var current_health: float setget set_current_health, get_current_health
 var max_health: float setget set_max_health
+
 const MIN_HEALTH: float = 0.0
 
 signal health_depleated()

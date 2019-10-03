@@ -1,15 +1,16 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://core/characters/enemies/frigate/Frigate.gd" type="Script" id=1]
 [ext_resource path="res://core/characters/enemies/frigate/frigate_movement_resource.tres" type="Resource" id=2]
 [ext_resource path="res://core/characters/enemies/frigate/frigate_core_data_resource.tres" type="Resource" id=3]
 [ext_resource path="res://assets/enemies/enemyBlack4.png" type="Texture" id=4]
 [ext_resource path="res://core/characters/modules/health/Health.tscn" type="PackedScene" id=5]
-[ext_resource path="res://core/characters/modules/debug/Debug.tscn" type="PackedScene" id=6]
-[ext_resource path="res://core/characters/enemies/frigate/TurretsController.gd" type="Script" id=7]
-[ext_resource path="res://assets/enemies/turretBase_small.png" type="Texture" id=8]
-[ext_resource path="res://core/characters/enemies/frigate/EnemyTurret.gd" type="Script" id=9]
-[ext_resource path="res://assets/enemies/gun06.png" type="Texture" id=10]
+[ext_resource path="res://core/characters/modules/health_bar/HealthBar.tscn" type="PackedScene" id=6]
+[ext_resource path="res://core/characters/modules/debug/Debug.tscn" type="PackedScene" id=7]
+[ext_resource path="res://core/characters/enemies/frigate/TurretsController.gd" type="Script" id=8]
+[ext_resource path="res://assets/enemies/turretBase_small.png" type="Texture" id=9]
+[ext_resource path="res://core/characters/enemies/frigate/EnemyTurret.gd" type="Script" id=10]
+[ext_resource path="res://assets/enemies/gun06.png" type="Texture" id=11]
 
 [sub_resource type="CircleShape2D" id=1]
 radius = 1457.38
@@ -33,27 +34,33 @@ polygon = PoolVector2Array( -14.721, -83.1848, -37.7395, -84.6942, -80.3803, -60
 
 [node name="Health" parent="." instance=ExtResource( 5 )]
 
+[node name="HealthBar" parent="." instance=ExtResource( 6 )]
+scale = Vector2( 1, 0.5 )
+
 [node name="AttackArea" type="Area2D" parent="."]
+editor/display_folded = true
 collision_layer = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AttackArea"]
 shape = SubResource( 1 )
 
-[node name="Debug" parent="." instance=ExtResource( 6 )]
+[node name="Debug" parent="." instance=ExtResource( 7 )]
+enabled = false
 
 [node name="TurretsController" type="Node2D" parent="."]
-script = ExtResource( 7 )
+editor/display_folded = true
+script = ExtResource( 8 )
 
 [node name="Turret" type="Sprite" parent="TurretsController"]
 editor/display_folded = true
-texture = ExtResource( 8 )
-script = ExtResource( 9 )
+texture = ExtResource( 9 )
+script = ExtResource( 10 )
 
 [node name="Pivot" type="Node2D" parent="TurretsController/Turret"]
 
 [node name="Gun" type="Sprite" parent="TurretsController/Turret/Pivot"]
 rotation = 4.71239
-texture = ExtResource( 10 )
+texture = ExtResource( 11 )
 offset = Vector2( 0, 10 )
 
 [node name="Muzzle" type="Position2D" parent="TurretsController/Turret/Pivot"]
@@ -65,14 +72,14 @@ wait_time = 0.6
 [node name="Turret2" type="Sprite" parent="TurretsController"]
 editor/display_folded = true
 position = Vector2( -93, 0 )
-texture = ExtResource( 8 )
-script = ExtResource( 9 )
+texture = ExtResource( 9 )
+script = ExtResource( 10 )
 
 [node name="Pivot" type="Node2D" parent="TurretsController/Turret2"]
 
 [node name="Gun" type="Sprite" parent="TurretsController/Turret2/Pivot"]
 rotation = 4.71239
-texture = ExtResource( 10 )
+texture = ExtResource( 11 )
 offset = Vector2( 0, 10 )
 
 [node name="Muzzle" type="Position2D" parent="TurretsController/Turret2/Pivot"]
