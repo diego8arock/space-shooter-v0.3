@@ -6,6 +6,8 @@ onready var ray = $RayCast2D
 
 var fighter: PackedScene = preload("res://core/characters/enemies/fighter/Fighter.tscn")
 var frigate: PackedScene = preload("res://core/characters/enemies/frigate/Frigate.tscn")
+var shield: PackedScene = preload("res://core/characters/enemies/shield/Shield.tscn")
+var homing: PackedScene = preload("res://core/characters/enemies/homing/Homing.tscn")
 
 enum TIER {ONE, TWO, THREE}
 export(TIER) var tier = TIER.ONE
@@ -26,12 +28,12 @@ func _ready() -> void:
 			timer.wait_time = rand_range(4.0, 6.0)
 			timer.start()
 			max_enemies = 3
-			enemy = frigate
+			enemy = homing
 		TIER.TWO:
 			timer.wait_time = rand_range(4.0, 6.0)
 			timer.start()
 			max_enemies = 1
-			enemy = frigate
+			enemy = homing
 	
 func _on_Timer_timeout() -> void:
 
