@@ -1,4 +1,5 @@
 extends Enemy
+class_name Fighter
 
 onready var bullet: PackedScene = preload("res://core/weapons/EnemyBullet.tscn")
 onready var muzzle = $Sprite/Muzzle
