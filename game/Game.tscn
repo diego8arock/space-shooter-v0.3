@@ -42,6 +42,7 @@ position = Vector2( 1168, 609 )
 scale = Vector2( 0.5, 0.5 )
 
 [node name="Background" type="ParallaxBackground" parent="."]
+editor/display_folded = true
 script = ExtResource( 9 )
 
 [node name="ParallaxLayer" type="ParallaxLayer" parent="Background"]
@@ -57,11 +58,9 @@ region_rect = Rect2( 0, 0, 3000, 3000 )
 
 [node name="SpawnPoint" parent="SpawnPointContainer" instance=ExtResource( 11 )]
 position = Vector2( -3466.18, -1919.37 )
-tier = 1
 
 [node name="SpawnPoint2" parent="SpawnPointContainer" instance=ExtResource( 11 )]
 position = Vector2( 6473.65, -1114.87 )
-tier = 1
 
 [node name="WeaponContainer" type="Node2D" parent="."]
 script = ExtResource( 12 )
