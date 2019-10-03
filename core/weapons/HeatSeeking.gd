@@ -79,7 +79,7 @@ func find_target() -> bool:
 func _on_HeatSeeking_body_entered(body: PhysicsBody2D) -> void:
 	
 	if body is Actor and body.health.get_current_health() != 0.0:
-		WeaponManager.show_explosion(explosion.instance(), body.global_position, global_scale)
+		WeaponManager.show_explosion(explosion.instance(), global_position, global_scale)
 		body.take_damage(damage)
 		debug.delete_all_properties()	
 		call_deferred("free")
