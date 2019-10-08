@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=2]
+[gd_scene load_steps=18 format=2]
 
 [ext_resource path="res://game/Game.gd" type="Script" id=1]
 [ext_resource path="res://debug/Debug.tscn" type="PackedScene" id=2]
@@ -10,11 +10,13 @@
 [ext_resource path="res://core/minimap/Minimap.tscn" type="PackedScene" id=8]
 [ext_resource path="res://game/Background.gd" type="Script" id=9]
 [ext_resource path="res://assets/background/purple.png" type="Texture" id=10]
-[ext_resource path="res://core/spawn/SpawnPoint.tscn" type="PackedScene" id=11]
-[ext_resource path="res://game/WeaponContainer.gd" type="Script" id=12]
-[ext_resource path="res://game/PowerUpContainer.gd" type="Script" id=13]
-[ext_resource path="res://core/characters/modules/debug/Debug.tscn" type="PackedScene" id=14]
-[ext_resource path="res://assets/sounds/os/main1.ogg" type="AudioStream" id=15]
+[ext_resource path="res://core/locations/player_base/Base.tscn" type="PackedScene" id=11]
+[ext_resource path="res://game/CheckpointContainer.gd" type="Script" id=12]
+[ext_resource path="res://game/SpawnPointContainer.gd" type="Script" id=13]
+[ext_resource path="res://game/WeaponContainer.gd" type="Script" id=14]
+[ext_resource path="res://game/PowerUpContainer.gd" type="Script" id=15]
+[ext_resource path="res://core/characters/modules/debug/Debug.tscn" type="PackedScene" id=16]
+[ext_resource path="res://assets/sounds/os/main1.ogg" type="AudioStream" id=17]
 
 [node name="Game" type="Node2D"]
 script = ExtResource( 1 )
@@ -54,28 +56,29 @@ centered = false
 region_enabled = true
 region_rect = Rect2( 0, 0, 3000, 3000 )
 
-[node name="SpawnPointContainer" type="Node2D" parent="."]
+[node name="Base" parent="." instance=ExtResource( 11 )]
+position = Vector2( 640, 360 )
 
-[node name="SpawnPoint" parent="SpawnPointContainer" instance=ExtResource( 11 )]
-position = Vector2( -3466.18, -1919.37 )
-
-[node name="SpawnPoint2" parent="SpawnPointContainer" instance=ExtResource( 11 )]
-position = Vector2( 6473.65, -1114.87 )
-
-[node name="WeaponContainer" type="Node2D" parent="."]
+[node name="CheckpointContainer" type="Node2D" parent="."]
 script = ExtResource( 12 )
 
-[node name="PowerUpContainer" type="Node2D" parent="."]
+[node name="SpawnPointContainer" type="Node2D" parent="."]
 script = ExtResource( 13 )
 
-[node name="Debug" parent="." instance=ExtResource( 14 )]
+[node name="WeaponContainer" type="Node2D" parent="."]
+script = ExtResource( 14 )
+
+[node name="PowerUpContainer" type="Node2D" parent="."]
+script = ExtResource( 15 )
+
+[node name="Debug" parent="." instance=ExtResource( 16 )]
 
 [node name="Control" type="Control" parent="."]
 margin_right = 40.0
 margin_bottom = 40.0
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="Control"]
-stream = ExtResource( 15 )
+stream = ExtResource( 17 )
 autoplay = true
 bus = "MainTheme"
 [connection signal="exit_button_pressed" from="CanvasLayer/StartScreen" to="." method="_on_StartScreen_exit_button_pressed"]
