@@ -1,6 +1,7 @@
 extends Node
 
 var spawn_point_container
+var chekpoint_container
 var score_ui
 var player: Player
 var stats_ui
@@ -17,9 +18,9 @@ func quit_game(_event: InputEvent = null) -> void:
 
 func start_game() -> void:
 	
-	do_background_parallax = true
-	player.global_scale *= 0.6
+	do_background_parallax = true	
 	player.global_position = OS.window_size / 2	
+	player.global_scale *= 0.6
 	get_tree().paused = false
 	
 func end_game() -> void:
@@ -30,7 +31,8 @@ func end_game() -> void:
 func restart_game() -> void:
 
 	for s in spawn_point_container.get_children():
-		s.delete_all_enemies()
+		if s.has_method("delete_all_enemies"):
+			s.delete_all_enemies()
 	do_background_parallax = true
 	player.global_position = OS.window_size / 2	
 	player.restart()
