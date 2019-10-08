@@ -48,11 +48,9 @@ shape = SubResource( 1 )
 enabled = false
 
 [node name="TurretsController" type="Node2D" parent="."]
-editor/display_folded = true
 script = ExtResource( 8 )
 
 [node name="Turret" type="Sprite" parent="TurretsController"]
-editor/display_folded = true
 texture = ExtResource( 9 )
 script = ExtResource( 10 )
 

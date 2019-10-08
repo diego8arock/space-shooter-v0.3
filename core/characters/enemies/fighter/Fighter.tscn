@@ -52,10 +52,14 @@ shape = SubResource( 2 )
 wait_time = 0.5
 one_shot = true
 
+[node name="TimerToArrive" type="Timer" parent="."]
+wait_time = 3.0
+one_shot = true
+autostart = true
+
 [node name="Health" parent="." instance=ExtResource( 5 )]
 
 [node name="Debug" parent="." instance=ExtResource( 6 )]
-enabled = false
 [connection signal="body_entered" from="SeekArea" to="." method="_on_SeekArea_body_entered"]
 [connection signal="body_exited" from="SeekArea" to="." method="_on_SeekArea_body_exited"]
 [connection signal="body_entered" from="PursuitArea" to="." method="_on_PursuitArea_body_entered"]
@@ -63,4 +67,5 @@ enabled = false
 [connection signal="screen_entered" from="VisibilityNotifier2D" to="." method="_on_VisibilityNotifier2D_screen_entered"]
 [connection signal="screen_exited" from="VisibilityNotifier2D" to="." method="_on_VisibilityNotifier2D_screen_exited"]
 [connection signal="timeout" from="TimerRPM" to="." method="_on_TimerRPM_timeout"]
+[connection signal="timeout" from="TimerToArrive" to="." method="_on_TimerToArrive_timeout"]
 [connection signal="health_depleated" from="Health" to="." method="_on_Health_health_depleated"]

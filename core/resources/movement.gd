@@ -10,3 +10,5 @@ export var cirlce_distance: float
 export var circle_radius: float
 export var angle_change: float
 export var wander_rotation_speed: float
+export var arrival_distance: float
+export var flee_distance: float

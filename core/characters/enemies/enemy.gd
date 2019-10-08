@@ -18,16 +18,19 @@ var cirlce_distance: float
 var circle_radius: float
 var angle_change: float
 var wander_rotation_speed: float
+var arrival_distance: float
+var flee_distance: float
 
 #target
 var player
+var location
 
 #core data
 var points: int
 
 #state
-enum STATE {IDLE, SEEK, ATTACK, EVADE}
-var state_name = ["IDLE", "SEEK", "ATTACK", "EVADE"]
+enum STATE {IDLE, SEEK, ATTACK, EVADE, ARRIVE, FLEE}
+var state_name = ["IDLE", "SEEK", "ATTACK", "EVADE", "ARRIVE", "FLEE"]
 var state
 
 #signals
@@ -51,6 +54,8 @@ func _ready() -> void:
 	circle_radius = m.circle_radius
 	angle_change = m.angle_change
 	wander_rotation_speed = m.wander_rotation_speed
+	arrival_distance = m.arrival_distance
+	flee_distance = m.flee_distance	
 
 	var d = data as CoreData
 	collision_damage = d.collision_damage
@@ -61,6 +66,23 @@ func seek(_target_position: Vector2) -> Vector2:
 	desired_velocity = (_target_position - global_position).normalized() * Time.adjust_speed(max_seek_speed)
 	steer(desired_velocity - velocity)
 	return (velocity + steering).clamped(Time.adjust_speed(max_seek_speed))
+	
+func flee(_target_position: Vector2) -> Vector2:
+
+	desired_velocity = (global_position - _target_position).normalized() * Time.adjust_speed(max_pursuit_speed)
+	steer(desired_velocity - velocity)
+	return (velocity + steering).clamped(Time.adjust_speed(max_pursuit_speed))
+	
+func arrive(_target_position: Vector2) -> Vector2:
+	
+	desired_velocity = _target_position - global_position
+	var distance = desired_velocity.length()
+	if distance < arrival_distance:
+		desired_velocity = desired_velocity.normalized() * Time.adjust_speed(max_seek_speed) * (distance / arrival_distance)
+	else:
+		desired_velocity = desired_velocity.normalized() * Time.adjust_speed(max_seek_speed)
+	steer(desired_velocity - velocity)
+	return (velocity + steering).clamped(Time.adjust_speed(max_seek_speed))
 
 func pursuit(_target_position: Vector2, _target_velocity: Vector2) -> Vector2:
 
@@ -68,6 +90,14 @@ func pursuit(_target_position: Vector2, _target_velocity: Vector2) -> Vector2:
 	var T = distance.length() / Time.adjust_speed(max_pursuit_speed)
 	future_position = _target_position + _target_velocity * T
 	steer(seek(future_position))
+	return (velocity + steering).clamped(Time.adjust_speed(max_pursuit_speed))
+	
+func evade(_target_position: Vector2, _target_velocity: Vector2) -> Vector2:
+
+	var distance = _target_position - global_position
+	var T = distance.length() / Time.adjust_speed(max_pursuit_speed)
+	future_position = _target_position + _target_velocity * T
+	steer(flee(future_position))
 	return (velocity + steering).clamped(Time.adjust_speed(max_pursuit_speed))
 
 func wander(_delta) -> Vector2:

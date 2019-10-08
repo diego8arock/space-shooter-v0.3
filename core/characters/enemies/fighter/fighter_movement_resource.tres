@@ -13,3 +13,5 @@ cirlce_distance = 20.0
 circle_radius = 10.0
 angle_change = 4.0
 wander_rotation_speed = 2.0
+arrival_distance = 1000.0
+flee_distance = 500.0

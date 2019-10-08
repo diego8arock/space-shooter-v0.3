@@ -4,6 +4,7 @@ class_name Fighter
 onready var bullet: PackedScene = preload("res://core/weapons/EnemyBullet.tscn")
 onready var muzzle = $Sprite/Muzzle
 onready var rpm = $TimerRPM
+onready var timer_to_arrive = $TimerToArrive
 onready var debug = $Debug
 
 var can_shoot: bool = true
@@ -16,7 +17,7 @@ func _ready() -> void:
 	var d = data as CoreData
 	health.set_max_health(d.max_health)
 	health.set_full_health()
-	debug.add_property("points")
+	debug.add_property("state")
 
 func _physics_process(delta: float) -> void:	
 	
@@ -32,6 +33,17 @@ func _physics_process(delta: float) -> void:
 			velocity = pursuit(player.global_position, player.velocity)	
 			look_at(player.global_position)	
 			shoot_bullet() 
+		STATE.ARRIVE:
+			velocity = arrive(location.global_position)
+			look_at(location.global_position)	
+			shoot_bullet() 
+			if global_position.distance_to(location.global_position) <= flee_distance:
+				chage_state(STATE.FLEE)
+				timer_to_arrive.start(3.0)
+		STATE.FLEE:
+			velocity = evade(location.global_position, location.global_position)
+			look_at(velocity)	
+
 		
 	var collision = move_and_collide(velocity)	
 	if collision:
@@ -45,11 +57,16 @@ func _on_SeekArea_body_entered(body: PhysicsBody2D) -> void:
 
 func _on_SeekArea_body_exited(body: PhysicsBody2D) -> void:
 	
-	chage_state(STATE.IDLE)
+	if location:
+		chage_state(STATE.ARRIVE)
+	else:	
+		chage_state(STATE.IDLE)
+		timer_to_arrive.stop()
 
 func _on_PursuitArea_body_entered(body: PhysicsBody2D) -> void:
 	
 	chage_state(STATE.ATTACK)
+	timer_to_arrive.stop()
 
 func _on_PursuitArea_body_exited(body: PhysicsBody2D) -> void:
 	
@@ -90,5 +107,8 @@ func _on_TimerRPM_timeout() -> void:
 	
 	can_shoot = true
 
+func _on_TimerToArrive_timeout() -> void:
+	
+	chage_state(STATE.ARRIVE)
 
 
