@@ -11,8 +11,9 @@ var damage: float = 0.0
 var max_force: float = 2.0
 var mass: float = 3.0
 var target: Node2D
-var ship: Node2D
 var shooted: bool = false
+
+signal destroyed
 
 func _physics_process(delta: float) -> void:
 	
@@ -20,9 +21,11 @@ func _physics_process(delta: float) -> void:
 		velocity = seek(target.global_position)
 		global_position += velocity
 		look_at(target.global_position)	
-	else:
-		global_position = ship.global_position
-		global_rotation = ship.global_rotation
+		
+func align_with_ship(_position: Vector2, _rotation: float) -> void:
+	
+	global_position = _position
+	global_rotation = _rotation
 
 func shoot( _target: Node2D) -> void:
 	
@@ -30,9 +33,8 @@ func shoot( _target: Node2D) -> void:
 	shooted = true
 	timer.start()
 
-func prepare(_damage: float, _ship: Node2D) -> void:
+func prepare(_damage: float) -> void:
 	
-	ship = _ship;
 	damage = _damage
 	WeaponManager.add(self)
 	
@@ -60,7 +62,9 @@ func _on_Missile_body_entered(body: PhysicsBody2D) -> void:
 
 func destroy() -> void:
 	
-	timer.stop()
+	emit_signal("destroyed")
+	if timer:
+		timer.stop()
 	set_physics_process(false)
 	hide()
 	WeaponManager.show_explosion(explosion_effect.instance(), global_position, global_scale)

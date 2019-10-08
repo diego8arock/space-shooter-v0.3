@@ -5,6 +5,7 @@ onready var shoot = $TimerShoot
 var missile: PackedScene = preload("res://core/weapons/Missile.tscn")
 var ready_missile
 var can_shoot = true
+var missile_damage: float = 35.0
 
 func _ready() -> void:
 	
@@ -13,11 +14,12 @@ func _ready() -> void:
 	var d = data as CoreData
 	health.set_max_health(d.max_health)
 	health.set_full_health()
-	var new_missile = missile.instance()
-	new_missile.prepare(10, self)	
-	ready_missile = new_missile
+	generate_missile()
 
 func _physics_process(delta: float) -> void:
+	
+	if ready_missile:
+		ready_missile.align_with_ship(global_position, global_rotation)
 	
 	match state:
 		STATE.IDLE:
@@ -44,3 +46,31 @@ func _on_Area2D_body_entered(body: PhysicsBody2D) -> void:
 func _on_TimerShoot_timeout() -> void:
 	
 	ready_missile.shoot(player)
+	ready_missile = null
+
+func generate_missile() -> void:
+	
+	var new_missile = missile.instance()
+	new_missile.prepare(missile_damage)	
+	new_missile.connect("destroyed", self, "rearm")
+	ready_missile = new_missile
+
+func rearm() -> void:
+	
+	generate_missile()
+	can_shoot = true
+	
+func take_damage(_damage: float) -> void:
+	
+	health.take_damage(_damage)
+	
+func _on_Health_health_depleated() -> void:
+	
+	died()
+		
+func died() -> void:
+	
+	if ready_missile:
+		ready_missile.destroy()
+	WeaponManager.show_small_explosion(global_position, global_scale * 1.5)	
+	.died()

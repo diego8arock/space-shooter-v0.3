@@ -33,8 +33,10 @@ collision_layer = 2
 shape = SubResource( 1 )
 
 [node name="TimerShoot" type="Timer" parent="."]
+wait_time = 2.0
 one_shot = true
 
 [node name="Health" parent="." instance=ExtResource( 5 )]
 [connection signal="body_entered" from="Area2D" to="." method="_on_Area2D_body_entered"]
 [connection signal="timeout" from="TimerShoot" to="." method="_on_TimerShoot_timeout"]
+[connection signal="health_depleated" from="Health" to="." method="_on_Health_health_depleated"]
