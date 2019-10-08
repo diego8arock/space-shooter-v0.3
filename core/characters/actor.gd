@@ -17,4 +17,5 @@ var audio: AudioStreamPlayer2D
 
 #override this method
 func take_damage(_damage: float) -> void:
-	pass
+	#If assert then method was not overriden
+	assert(false)
