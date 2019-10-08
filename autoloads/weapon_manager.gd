@@ -6,7 +6,7 @@ var big_explosion: PackedScene = preload("res://effects/big_explosion/BigExplosi
 var weapon_container: Node2D
 
 func add(_weapon) -> void:
-	weapon_container.add_child(_weapon)
+	weapon_container.call_deferred("add_child", _weapon)
 	
 func show_explosion(_explosion, _position, _scale) -> void:
 	
