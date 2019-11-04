@@ -32,7 +32,7 @@ func _on_Timer_timeout() -> void:
 
 func _on_Bullet_body_entered(body: PhysicsBody2D) -> void:
 	
-	if body is Actor and body.health.get_current_health() != 0.0:
+	if body.has_node("Health") and body.health.get_current_health() != 0.0:
 		timer.stop()
 		set_physics_process(false)
 		hide()
