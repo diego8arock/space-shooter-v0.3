@@ -1,4 +1,4 @@
-extends Area2D
+extends StaticBody2D
 class_name Checkpoint
 
 onready var bullet: PackedScene = preload("res://core/weapons/PlayerBullet.tscn")
@@ -8,10 +8,12 @@ onready var rpm = $TimerRPM
 onready var debug = $Debug
 onready var sprite = $Sprite
 onready var tween = $Tween
+onready var health_bar = $HealthBar
 
+var health: Health
 var enemy_qeueue = {}
 var damage: float = 1.0
-var rotate_speed: float = 10.0
+var rotate_speed: float = 30.0
 var level: int
 var target_adquired: bool = false
 var target 
@@ -21,11 +23,16 @@ enum FLOAT {AWAY, BACK}
 var float_state = FLOAT.AWAY
 
 func _ready() -> void:
-	
-	debug.add_property("target")
+
 	float_away()
+	health = $Health
+	health.set_max_health(1000)
+	health.set_full_health()
+	health_bar.set_max_value(1000)
 
 func _process(delta: float) -> void:
+	
+	sprite.global_position = global_position
 	
 	if target_adquired:
 		var target_direction = (target.global_position - gun.global_position).normalized()
@@ -37,33 +44,17 @@ func _process(delta: float) -> void:
 			can_shoot = false
 			rpm.start()
 
-
 func shoot_single() -> void:
 	
 	var new_bullet = bullet.instance()
 	var direction = Vector2.RIGHT.rotated(muzzle.global_rotation)
 	new_bullet.global_scale = Vector2(0.3, 0.3)
 	new_bullet.shoot(muzzle.global_position, direction, damage)
-
-func _on_Checkpoint_body_entered(body: PhysicsBody2D) -> void:
 	
-	if body is Enemy:
-		if not target_adquired:
-			target = body
-			target_adquired = true
-			can_shoot = true
-		else:
-			enemy_qeueue[hash(body)] = body
-			
-func _on_Checkpoint_body_exited(body: PhysicsBody2D) -> void:
+func take_damage(_damage: float) -> void:
 	
-	if body is Enemy:
-		if target_adquired and body == target:
-			target_adquired = false
-			target = null
-		else:
-			if enemy_qeueue.size() > 0:
-				enemy_qeueue.erase(hash(body))
+	health.take_damage(_damage)
+	health_bar.take_damage(_damage)
 
 func _on_TimerRPM_timeout() -> void:
 	
@@ -92,3 +83,27 @@ func _on_Tween_tween_all_completed() -> void:
 			float_back()
 		FLOAT.BACK:
 			float_away()
+
+func _on_DetectArea_body_entered(body: PhysicsBody2D) -> void:
+	
+	if body is Enemy:
+		set_target(body)
+		enemy_qeueue[hash(body)] = body
+
+
+func _on_DetectArea_body_exited(body: PhysicsBody2D) -> void:
+	
+	if body is Enemy:
+		if body == target:
+			enemy_qeueue.erase(hash(body))
+			target_adquired = false
+			if enemy_qeueue.size() > 0:
+				var keys = enemy_qeueue.keys()
+				set_target(enemy_qeueue[keys[0]])
+				
+func set_target(body: PhysicsBody2D) -> void:
+	
+	if not target_adquired:
+		target = body
+		target_adquired = true
+		can_shoot = true
