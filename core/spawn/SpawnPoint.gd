@@ -27,12 +27,12 @@ func _ready() -> void:
 		TIER.ONE:			
 			timer.wait_time = rand_range(4.0, 6.0)
 			timer.start()
-			max_enemies = 1
+			max_enemies = 3
 			enemy = fighter
 		TIER.TWO:
 			timer.wait_time = rand_range(4.0, 6.0)
 			timer.start()
-			max_enemies = 1
+			max_enemies = 3
 			enemy = fighter
 	
 func _on_Timer_timeout() -> void:
