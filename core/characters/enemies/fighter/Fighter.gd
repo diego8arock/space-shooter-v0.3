@@ -7,6 +7,7 @@ onready var rpm = $TimerRPM
 onready var timer_to_arrive = $TimerToArrive
 onready var debug = $Debug
 
+var shoot_on_arrival: bool = false
 var can_shoot: bool = true
 var bullet_damage: float = 5.0
 
@@ -24,26 +25,22 @@ func _physics_process(delta: float) -> void:
 	match state:
 		STATE.IDLE:
 			velocity = wander(delta)
-			var current_direction = Vector2.RIGHT.rotated(global_rotation)
-			global_rotation = current_direction.normalized().slerp(velocity.normalized(), wander_rotation_speed * delta).angle()
+			rotate_to(wander_rotation_speed, delta)
 		STATE.SEEK:
 			velocity = seek(player.global_position)
-			look_at(player.global_position)	
+			rotate_to(seek_rotation_speed, delta)
 		STATE.ATTACK:
 			velocity = pursuit(player.global_position, player.velocity)	
-			look_at(player.global_position)	
+			rotate_to(pursuit_rotation_speed, delta)
 			shoot_bullet() 
 		STATE.ARRIVE:
 			velocity = arrive(location.global_position)
-			look_at(location.global_position)	
-			shoot_bullet() 
-			if global_position.distance_to(location.global_position) <= flee_distance:
-				chage_state(STATE.FLEE)
-				timer_to_arrive.start(3.0)
+			rotate_to(arrival_rotation_speed, delta)
+			if shoot_on_arrival:
+				shoot_bullet() 
 		STATE.FLEE:
 			velocity = evade(location.global_position, location.global_position)
-			look_at(velocity)	
-
+			rotate_to(evade_rotation_speed, delta)
 		
 	var collision = move_and_collide(velocity)	
 	if collision:
@@ -95,14 +92,6 @@ func died() -> void:
 	WeaponManager.show_small_explosion(global_position, global_scale * 1.5)	
 	.died()
 
-func _on_VisibilityNotifier2D_screen_entered() -> void:
-	
-	emit_signal("screen_entered")
-
-func _on_VisibilityNotifier2D_screen_exited() -> void:
-	
-	emit_signal("screen_exited")
-
 func _on_TimerRPM_timeout() -> void:
 	
 	can_shoot = true
@@ -110,5 +99,23 @@ func _on_TimerRPM_timeout() -> void:
 func _on_TimerToArrive_timeout() -> void:
 	
 	chage_state(STATE.ARRIVE)
+
+func _on_ArrivalArea_body_entered(body: PhysicsBody2D) -> void:
+	
+	if body is StaticBody2D and state == STATE.ARRIVE:
+		shoot_on_arrival = true		
+
+func _on_ArrivalArea_body_exited(body: PhysicsBody2D) -> void:
+	
+	if body is StaticBody2D and state == STATE.ARRIVE:
+		shoot_on_arrival = false		
+
+func _on_EvadeArea_body_entered(body: PhysicsBody2D) -> void:
+	
+	chage_state(STATE.FLEE)
+
+func _on_EvadeArea_body_exited(body: PhysicsBody2D) -> void:
+	
+	timer_to_arrive.start()
 
 
