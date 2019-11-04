@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=2]
+[gd_scene load_steps=19 format=2]
 
 [ext_resource path="res://game/Game.gd" type="Script" id=1]
 [ext_resource path="res://debug/Debug.tscn" type="PackedScene" id=2]
@@ -17,6 +17,7 @@
 [ext_resource path="res://game/PowerUpContainer.gd" type="Script" id=15]
 [ext_resource path="res://core/characters/modules/debug/Debug.tscn" type="PackedScene" id=16]
 [ext_resource path="res://assets/sounds/os/main1.ogg" type="AudioStream" id=17]
+[ext_resource path="res://game/DefaultCamera.gd" type="Script" id=18]
 
 [node name="Game" type="Node2D"]
 script = ExtResource( 1 )
@@ -81,6 +82,13 @@ margin_bottom = 40.0
 stream = ExtResource( 17 )
 autoplay = true
 bus = "MainTheme"
+
+[node name="DefaultCamera" type="Camera2D" parent="."]
+position = Vector2( 638.953, 358.747 )
+current = true
+drag_margin_h_enabled = false
+drag_margin_v_enabled = false
+script = ExtResource( 18 )
 [connection signal="exit_button_pressed" from="CanvasLayer/StartScreen" to="." method="_on_StartScreen_exit_button_pressed"]
 [connection signal="start_button_pressed" from="CanvasLayer/StartScreen" to="." method="_on_StartScreen_start_button_pressed"]
 [connection signal="exit_button_pressed" from="CanvasLayer/GameOverScreen" to="." method="_on_GameOverScreen_exit_button_pressed"]
