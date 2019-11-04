@@ -4,6 +4,7 @@ var spawn_point_container
 var chekpoint_container
 var score_ui
 var player: Player
+var player_exists: bool = false
 var stats_ui
 
 var do_background_parallax: bool = false
@@ -18,9 +19,10 @@ func quit_game(_event: InputEvent = null) -> void:
 
 func start_game() -> void:
 	
-	do_background_parallax = true	
-	player.global_position = OS.window_size / 2	
-	player.global_scale *= 0.6
+	do_background_parallax = true
+	if player_exists:	
+		player.global_position = OS.window_size / 2	
+		player.global_scale *= 0.6
 	get_tree().paused = false
 	
 func end_game() -> void:

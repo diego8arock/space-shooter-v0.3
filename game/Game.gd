@@ -42,6 +42,13 @@ func on_Event_message_sent(_text: String) -> void:
 	message_screen.show()
 	yield(get_tree().create_timer(3.0), "timeout")
 	message_screen.hide()
+	
+func add_player_to_game() -> void:
+	
+	GameManager.player = player.instance()
+	GameManager.player_exists = true
+	add_child(GameManager.player)
+	Event.connect("player_died", self, "_on_Event_player_died")
 
 func before_new_game() -> void:
 	
@@ -56,9 +63,7 @@ func before_new_game() -> void:
 	
 func start_new_game() -> void:
 		
-	GameManager.player = player.instance()
-	add_child(GameManager.player)
-	Event.connect("player_died", self, "_on_Event_player_died")
+	add_player_to_game()
 	GameManager.stats_ui = stats_screen
 	GameManager.spawn_point_container = $SpawnPointContainer
 	GameManager.start_game()

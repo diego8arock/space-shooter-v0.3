@@ -13,7 +13,7 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	
-	if EnemyManager.is_enemy_alive(enemy):				
+	if GameManager.player_exists and EnemyManager.is_enemy_alive(enemy):				
 		var distance = GameManager.player.global_position.distance_to(enemy.global_position)
 		if distance <= out_of_range:
 			distance = distance / 20

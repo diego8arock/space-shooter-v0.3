@@ -10,6 +10,6 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:	
 	
-	if GameManager.do_background_parallax:
+	if GameManager.player_exists and GameManager.do_background_parallax:
 		scroll += GameManager.player.velocity / 200
 		scroll_offset += scroll

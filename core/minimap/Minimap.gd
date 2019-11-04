@@ -23,8 +23,9 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	
-	global_rotation = GameManager.player.velocity_rotation * -1 + deg2rad(90)
-	player_sprite.global_rotation = deg2rad(-90)
+	if GameManager.player_exists:
+		global_rotation = GameManager.player.velocity_rotation * -1 + deg2rad(90)
+		player_sprite.global_rotation = deg2rad(-90)
 	
 func on_EnemyManager_enemy_added(_enemy) -> void:
 	
